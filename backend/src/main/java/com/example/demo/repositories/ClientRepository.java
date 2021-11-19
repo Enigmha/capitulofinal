@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entities.Client;
 
-@Repository 
-public interface ClientRepository extends JpaRepository<Client, Long> { 
+@Repository
+public interface ClientRepository extends JpaRepository<Client, Long> {
 
 }

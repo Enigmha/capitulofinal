@@ -1,14 +1,14 @@
 package com.example.demo.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +25,9 @@ public class ClientService {
 	private ClientRepository repository;
 
 	@Transactional(readOnly = true)
-	public List<ClientDTO> findAll() {
-		List<Client> list = repository.findAll();
-		return list.stream().map(x -> new ClientDTO(x)).collect(Collectors.toList());
+	public Page<ClientDTO> findAllPage(PageRequest pageRequest) {
+		Page<Client> list = repository.findAll(pageRequest);
+		return list.map(x -> new ClientDTO(x));
 	}
 
 	@Transactional(readOnly = true)
@@ -46,12 +46,12 @@ public class ClientService {
 		entity.setChildren(dto.getChildren());
 		entity = repository.save(entity);
 		return new ClientDTO(entity);
-	}
+	} 	
 
 	@Transactional
 	public ClientDTO update(Long id, ClientDTO dto) {
 		try {
-			Client entity = repository.getOne(id);
+			Client entity = repository.getById(id);
 			entity.setName(dto.getName());
 			entity.setCpf(dto.getCpf());
 			entity.setIncome(dto.getIncome());
@@ -66,12 +66,10 @@ public class ClientService {
 
 	public void delete(Long id) {
 		try {
-		repository.deleteById(id);
-		}
-		catch(EmptyResultDataAccessException e) {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException("Nao achou o ID " + id);
-		}
-		catch(DataIntegrityViolationException e) {  
+		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException("Violacao de integridade");
 		}
 	}
