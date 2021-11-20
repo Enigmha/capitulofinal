@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 import com.example.demo.entities.Client;
 
@@ -12,24 +13,30 @@ public class ClientDTO implements Serializable{
 	private String cpf;
 	private Double income;
 	private Integer children;
+	private Instant date;
 	
 	public ClientDTO() {
 	}
 
-	public ClientDTO(Long id, String name, String cpf, Double income, Integer children) {
+	public ClientDTO(Long id, String name, String cpf, Double income, Integer children, Instant date) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
 		this.income = income;
+		this.date = date;
 		this.children = children;
+		
 	}
-	
+
 	public ClientDTO(Client entity) {
 		this.id = entity.getId();
 		this.name = entity.getName();
 		this.cpf = entity.getCpf();
 		this.income = entity.getIncome();
+		this.date = entity.getDate();
 		this.children = entity.getChildren();
+
 	}
 
 	public Long getId() {
@@ -71,9 +78,13 @@ public class ClientDTO implements Serializable{
 	public void setChildren(Integer children) {
 		this.children = children;
 	}
-	
-	
-	
-	
 
+	public Instant getDate() {
+		return date;
+	}
+
+	public void setDate(Instant date) {
+		this.date = date;
+	}
+	
 }
